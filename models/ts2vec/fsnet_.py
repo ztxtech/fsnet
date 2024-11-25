@@ -106,8 +106,7 @@ class SamePadConv(nn.Module):
 
             v, idx = torch.topk(att, 2)
             ww = torch.index_select(self.W, 1, idx)
-            idx = idx.unsqueeze(1).float()
-            old_w = ww @ idx
+            old_w = ww @ v.clone().detach().unsqueeze(1).float()
             # write memory
             s_att = torch.zeros(att.size(0)).to(self.device)
             s_att[idx.squeeze().long()] = v.squeeze()
